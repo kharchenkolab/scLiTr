@@ -22,7 +22,8 @@ pip install sclitr
 
 ## Documentation
 
-Please visit ReadTheDocs web-site with full documentation.
+Please visit [documentation web-site](https://sclitr.readthedocs.io/) to check out API description and a few
+tutorials with analysis.
 
 ## clones2cells
 
