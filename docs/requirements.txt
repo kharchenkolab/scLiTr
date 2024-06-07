@@ -3,3 +3,6 @@ sphinx-rtd-theme
 nbsphinx
 ipywidgets
 numpydoc
+tqdm
+numpy
+pandas
