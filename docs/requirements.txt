@@ -6,3 +6,8 @@ numpydoc
 tqdm
 numpy
 pandas
+pynndescent
+scanpy
+scikit-learn
+torch
+mpltern
