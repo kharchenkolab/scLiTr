@@ -1,4 +1,4 @@
-<p align="center"><a href="https://sclitr.readthedocs.io"><img src="docs/source/logo.png" height="250"></a></p>
+<p align="center"><a href="https://sclitr.readthedocs.io/en/latest/"><img src="docs/source/logo.png" height="250"></a></p>
 
 # scLiTr
 
@@ -24,7 +24,7 @@ pip install sclitr
 
 ## Documentation
 
-Please visit [documentation web-site](https://sclitr.readthedocs.io) to check out API description and a few
+Please visit [documentation web-site](https://sclitr.readthedocs.io/en/latest/) to check out API description and a few
 tutorials with analysis.
 
 ## clones2cells
