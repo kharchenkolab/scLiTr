@@ -1,3 +1,5 @@
+<p align="center"><a href="https://sclitr.readthedocs.io"><img src="docs/source/logo.png" height="250"></a></p>
+
 # scLiTr
 
 scLiTr is a Python package for analysis of lineage tracing coupled with single-cell RNA-Seq.
