@@ -221,15 +221,19 @@ def clone2vec(
     clone2vec = model.embedding.weight.data.cpu().numpy()
     if not (fill_ct is None):
         cell_counts = adata_only_clones.obs.groupby([fill_ct, obs_name]).size().unstack()[adata_only_clones.uns[f"{obsm_name}_names"]]
+        cell_counts = cell_counts.values
+        
         freqs = cell_counts / cell_counts.sum(axis=0)
+        freqs = freqs.values
     else:
-        cell_counts = freqs = np.array([0] * len(adata.uns[f"{obsm_name}_names"]))
+        cell_counts = np.array([0] * len(adata.uns[f"{obsm_name}_names"]))
+        freqs = np.array([0] * len(adata.uns[f"{obsm_name}_names"]))
 
     clones = sc.AnnData(
         X=cell_counts.T,
         layers={
-            "frequencies": freqs.values.T,
-            "counts": cell_counts.values.T,
+            "frequencies": freqs.T,
+            "counts": cell_counts.T,
         },
         obsm={
             obsm_key: clone2vec.copy(),
