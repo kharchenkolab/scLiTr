@@ -65,7 +65,7 @@ def clonal_nn(
 
     var_mapping = dict(zip(
         clonal_obs.cat.categories[clonal_obs.cat.categories != non_clonal_str],
-        range(len(clonal_obs.cat.categories) - 1),
+        range(len(clonal_obs.cat.categories[clonal_obs.cat.categories != non_clonal_str])),
     ))
     
     train = adata[clonal_obs != non_clonal_str].obsm[use_rep]
