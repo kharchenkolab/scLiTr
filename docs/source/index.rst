@@ -12,7 +12,7 @@ fully connected neural network (specifically it uses Skip-Gram architecture) tha
 of cells. As a result, clones that exist in similar context in gene expression space will have similar weights in this neural network, and these
 weights will be used as embedding for further analysis.
 
-Source code for the package could be found `GitHub <https://github.com/kharchenkolab/scLiTr>`__.
+Source code for the package could be found on `GitHub <https://github.com/kharchenkolab/scLiTr>`__.
 
 Installation
 ------------
