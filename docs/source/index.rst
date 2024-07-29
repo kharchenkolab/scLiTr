@@ -12,6 +12,8 @@ fully connected neural network (specifically it uses Skip-Gram architecture) tha
 of cells. As a result, clones that exist in similar context in gene expression space will have similar weights in this neural network, and these
 weights will be used as embedding for further analysis.
 
+Source code for the package could be found `GitHub <https://github.com/kharchenkolab/scLiTr>`__.
+
 Installation
 ------------
 
@@ -26,6 +28,20 @@ or the latest development version can be installed from GitHub using:
 .. code-block:: console
 
    pip install git+https://github.com/kharchenkolab/scLiTr
+
+clones2cells
+------------
+For interactive exploration of clonal and gene expression embeddings together we recommend using our simple tool `clones2cells <https://github.com/serjisa/clones2cells_app>`__. You can install all necessary dependencies via pip:
+
+.. code-block:: console
+
+   pip install streamlit plotly streamlit_plotly_events pandas
+
+and after launch the tool from the command line:
+
+.. code-block:: console
+
+   streamlit run https://raw.githubusercontent.com/serjisa/clones2cells_app/main/clones2cells_viewer.py --theme.base light
 
 .. toctree::
    :caption: Main
