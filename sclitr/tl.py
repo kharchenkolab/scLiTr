@@ -168,7 +168,7 @@ def clone2vec(
     idx2clone = dict(zip(clone2idx.values(), clone2idx.keys()))
     indices = np.array(range(len(adata.uns[f"{obsm_name}_names"])))
 
-    k_estimated = list(set(adata.obsm[obsm_name].A.sum(axis=1)))
+    k_estimated = list(set(adata.obsm[obsm_name].toarray().sum(axis=1)))
     if len(k_estimated) > 1:
         raise Exception("adata.obsm[obsm_name] should contain the result of kNN graph construction with fixed k.")
     k_estimated = int(k_estimated[0])
@@ -176,7 +176,7 @@ def clone2vec(
     adata_only_clones = adata[adata.obs[obs_name].isin(adata.uns[f"{obsm_name}_names"])]
     pairs = []
     for X, clone in zip(
-        adata_only_clones.obsm[obsm_name].A,
+        adata_only_clones.obsm[obsm_name].toarray(),
         adata_only_clones.obs[obs_name],
     ):
         cl_nn = X > 0
@@ -358,11 +358,11 @@ def summarize_expression(
     for clone in clones.obs_names:
         if strategy == "average":
             try:
-                clones_expr[clone] = X[(adata.obs[obs_name] == clone) & mask].mean(axis=0).A[0]
+                clones_expr[clone] = X[(adata.obs[obs_name] == clone) & mask].mean(axis=0).toarray()[0]
             except ZeroDivisionError:
                 clones_expr[clone] = np.zeros(len(var_names))
         else:
-            clones_expr[clone] = X[(adata.obs[obs_name] == clone) & mask].sum(axis=0).A[0]
+            clones_expr[clone] = X[(adata.obs[obs_name] == clone) & mask].sum(axis=0).toarray()[0]
     
     clones_expr = sc.AnnData(pd.DataFrame(clones_expr, index=var_names).T)
     
