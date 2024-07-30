@@ -6,8 +6,8 @@ project = "scLiTr"
 copyright = "2024, Kharchenko lab, Adameyko lab"
 authors = "Isaev, Kharchenko"
 
-release = "0.1.2"
-version = "0.1.2"
+release = "0.1.4"
+version = "0.1.4"
 
 # -- General configuration ------------------------------------------------
 
@@ -47,8 +47,7 @@ numpydoc_validation_checks = {"all", "GL01", "SA04", "RT03"}
 # -- Options for HTML output
 
 html_theme = "sphinx_rtd_theme"
-html_static_path = ["_static"]
-html_logo = "_static/logo.png"
+html_logo = "logo.png"
 html_theme_options = {
     "titles_only": True,
     # Toc options
@@ -58,7 +57,7 @@ html_theme_options = {
     "includehidden": True,
     "titles_only": False,
     "display_version": False,
-    "logo_only": False,
+    "logo_only": True,
 }
 
 # Generate the API documentation when building
