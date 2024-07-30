@@ -59,7 +59,6 @@ html_theme_options = {
     "display_version": False,
     "logo_only": True,
 }
-html_css_files = ["custom.css"]
 
 # Generate the API documentation when building
 autosummary_generate = True
