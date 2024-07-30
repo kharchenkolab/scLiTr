@@ -17,15 +17,32 @@ will be used as embedding for further analysis.
 
 ## Installation
 
-scLiTr might be installed via `pip`:
+scLiTr might be installed via `pip` (takes 1-2 minutes on Google Colab):
 ```bash
 pip install sclitr
 ```
+or the latest development version can be installed from GitHub using:
+```bash
+pip install git+https://github.com/kharchenkolab/scLiTr
+```
 
-## Documentation
+## System requirements
+
+`scLiTr` requires Python 3.8 or later with packages listed in [setup.cfg](setup.cfg) file. The package was successfully tested
+on the following systems:
+
+* macOS Sonoma 14.5 (Apple M1 Chip @ 3.20GHz × 8, 16GB RAM) — *MacBook Air M1*,
+* Ubuntu 18.04.5 LTS, 64-bit (Intel Xeon @ 2.60GHz × 32, 256GB RAM) — *PowerEdge server*,
+* Ubuntu 22.04.3 LTS, 64-bit (Intel Xeon @ 2.20GHz × 2, 13GB RAM) — *Google Colab*.
+
+## Documentation and tutorials
 
 Please visit [documentation web-site](https://sclitr.readthedocs.io/en/latest/) to check out API description and a few
 tutorials with analysis.
+
+An example with the dataset from [Weinreb et al., 2020](https://www.science.org/doi/10.1126/science.aaw3381) is available on
+[Google Colab](https://colab.research.google.com/github/kharchenkolab/scLiTr/blob/main/docs/source/Basic_usage.ipynb)
+(takes about 45 minutes on the CPU, of which approximately 30 minutes are clone2vec latent representation construction).
 
 ## clones2cells
 
