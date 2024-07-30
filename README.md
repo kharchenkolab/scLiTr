@@ -1,4 +1,4 @@
-<p align="center"><a href="https://sclitr.readthedocs.io/en/latest/"><img src="docs/_static/logo.png" height="250"></a></p>
+<p align="center"><a href="https://sclitr.readthedocs.io/en/latest/"><img src="docs/source/logo.png" height="250"></a></p>
 
 # scLiTr
 
