@@ -47,6 +47,8 @@ numpydoc_validation_checks = {"all", "GL01", "SA04", "RT03"}
 # -- Options for HTML output
 
 html_theme = "sphinx_rtd_theme"
+html_static_path = ["_static"]
+html_logo = "_static/logo.png"
 html_theme_options = {
     "titles_only": True,
     # Toc options
@@ -55,6 +57,8 @@ html_theme_options = {
     "navigation_depth": 4,
     "includehidden": True,
     "titles_only": False,
+    "display_version": False,
+    "logo_only": False,
 }
 
 # Generate the API documentation when building
