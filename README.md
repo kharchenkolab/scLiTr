@@ -10,7 +10,7 @@ way of representation of heterogeneity within clonal behaviour for cell type tre
 generation regarding cells' multipotency.
 
 clone2vec builds representation of clones in exact same way with popular word embedding algorithm — word2vec —
-via construction two-layers fully connected neural network (specifically it uses Skip-Gram architecture) that
+via construction two-layers fully connected neural network (it uses Skip-Gram architecture) that
 aims to predict neighbour cells clonal labellings by clonal label of cells. As a result, clones that exist in
 similar context in gene expression space will have similar weights in this neural network, and these weights
 will be used as embedding for further analysis.
