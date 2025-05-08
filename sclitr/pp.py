@@ -6,6 +6,57 @@ import scanpy as sc
 import numpy as np
 import pandas as pd
 
+def filter_clones(
+    adata: AnnData,
+    na_value: str = "NA",
+    clonal_obs: str = "Clone",
+    min_size: int | None = None,
+    max_size: int | None = None,
+    inplace: bool = True,
+) -> None | AnnData:
+    """
+    Filters clonal observations in the provided AnnData object based on specified size criteria.
+    
+    Parameters
+    ----------
+    adata : AnnData
+        Annotated data matrix containing the clonal information in `adata.obs`.
+    na_value : str, optional
+        The value used to indicate absence of clonal labeling for a cell. Default is "NA".
+    clonal_obs : str, optional
+        The name of the column in `adata.obs` containing clonal labels. Default is "Clone".
+    min_size : int, optional
+        The minimum number of cells required to keep a clone. Default is None (no lower bound).
+    max_size : int, optional
+        The maximum number of cells allowed for a clone. Default is None (no upper bound).
+    inplace : bool, optional
+        Whether to modify the `adata` object in place or return a modified copy. Default is True.
+
+    Returns
+    -------
+    None or AnnData
+        If `inplace` is True, the function modifies the `adata` object directly and returns None.
+        Otherwise, it returns a new `AnnData` object with the filtered clonal observations.
+    """
+    whitelist = adata.obs[clonal_obs].value_counts()
+    whitelist = whitelist[whitelist.index != na_value]
+    if not(min_size is None):
+        whitelist = whitelist[whitelist >= min_size]
+    if not(max_size is None):
+        whitelist = whitelist[whitelist <= max_size]
+    whitelist = whitelist.index
+    
+    if inplace:
+        adata.obs[clonal_obs] = [
+            i if i in whitelist else na_value for i in adata.obs[clonal_obs]
+        ]
+    else:
+        adata = adata.copy()
+        adata.obs[clonal_obs] = [
+            i if i in whitelist else na_value for i in adata.obs[clonal_obs]
+        ]
+        return adata
+
 def prepare_clones2cells(
     adata: AnnData,
     embedding_type: str,
@@ -14,27 +65,30 @@ def prepare_clones2cells(
     dimred_name: str = "X_umap",
 ) -> pd.DataFrame:
     """
-    Function that prepares dataframes for clones2cells viewer.
-
+    Prepares a dataframe suitable for the `clones2cells` visualization, based on either clone2vec or gene expression (GEX) data.
+    
     Parameters
     ----------
     adata : AnnData
-        Annotated data matrix with gene expression or clonal data.
+        Annotated data matrix containing either clone2vec embeddings or gene expression data.
     embedding_type : str
-        One of "clone2vec" or "GEX" — which dataset is provided to generate
-        clones2cells-friendly dataframe.
+        The type of embedding data to use. Should be either "clone2vec" or "GEX".
     clonal_obs : None | str, optional
-        Please provide name of the column with clonal labelling in the case
-        of gene expression object, by default None.
+        The name of the column in `adata.obs` containing clonal labels. Required for "GEX" embedding type.
     keep_obs : None | list, optional
-        Which columns from `adata.obs` should be kept, by default None.
+        List of additional columns in `adata.obs` to retain in the output dataframe. Default is None.
     dimred_name : str, optional
-        Name of `adata.obsm` slot to keep, by default "X_umap".
+        The name of the key in `adata.obsm` that contains the dimensionality-reduced embeddings. Default is "X_umap".
 
     Returns
     -------
     pd.DataFrame
-        clones2cells-friendly dataframe.
+        A dataframe containing the relevant columns for visualization in `clones2cells`, including UMAP coordinates and clonal labels.
+
+    Raises
+    ------
+    Exception
+        If `embedding_type` is not one of "clone2vec" or "GEX", or if `embedding_type` is "GEX" but `clonal_obs` is not provided.
     """
     keep_obs = keep_obs.copy()
 
@@ -80,27 +134,24 @@ def prepare_multiple_injections(
     final_obs_name: str = "clone",
 ) -> AnnData:
     """
-    Function that prepares clone2vec-friendly object in the case of multiple injections.
-    Briefly, it duplicates cells with more than one clonal labelling.
-
+    Prepares a clone2vec-friendly AnnData object by handling multiple clonal injections per cell.
+    Duplicates cells with multiple clonal labels into separate rows for each unique clone label.
+    
     Parameters
     ----------
     adata : AnnData
-        Annotated data matrix.
+        Annotated data matrix containing the clonal labels across multiple columns.
     injection_cols : list[str]
-        Columns in `adata.obs` with clonal labellings.
+        List of column names in `adata.obs` that contain the clonal labels.
     na_value : str, optional
-        Which value is used to indicate absence of the clonal information for the cell,
-        by default "NA".
+        The value used to indicate missing or absent clonal information. Default is "NA".
     final_obs_name : str, optional
-        Name of the new column in `adata.obs` with newly generated clonal labelling annotation,
-        by default "clone".
+        The name of the new column in `adata.obs` to store the merged clone labels. Default is "clone".
 
     Returns
     -------
     AnnData
-        Newly generated Annotated data matrix with duplicated cells with multiple clonal
-        assignments.
+        A new AnnData object with cells duplicated where necessary, with updated clonal labeling in the `final_obs_name` column.
     """
     
     bc_list = []
@@ -112,7 +163,7 @@ def prepare_multiple_injections(
             bc_list.append(bc)
             clone_obs.append(na_value)
         else:
-            for label, clone in clonal_labels[clonal_labels != na_value].iteritems():
+            for label, clone in clonal_labels[clonal_labels != na_value].items():
                 bc_list.append(bc)
                 clone_obs.append(label + "_" + clone)
                 

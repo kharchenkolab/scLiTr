@@ -43,10 +43,37 @@ Step 3: clone2vec analysis
 
 .. code-block:: python
 
-    sc.pp.neighbors(clones, use_rep="word2vec")
+    sc.pp.neighbors(clones, use_rep="clone2vec")
     sc.tl.umap(clones)
     sc.tl.leiden(clones)
 
 And after perform all other additional steps of analysis.
+
+Step 4: Identification of predictors of clonal behaviour
+********************************************************
+
+In the simplest case, the model can be built to identify gene expression predictors of (a) position on a
+clonal embedding and (b) cell type composition of clones based on the expression in progenitor cells (if they exist).
+More broadly, we don't have to limit the prediction by the progenitor cells, and in this case the algorithm will
+identify general gene expression predictors of the distribution of the clone on an embedding.
+
+.. code-block:: python
+
+    shapdata_c2v = sl.tl.predict_c2v(
+        adata,
+        clones,
+        clone_col="clone", # Column with clonal labels
+        ct_col="cell_type", # Column with cell type labels
+        limit_ct="progenitors", # Prediction will be performed based on these cells
+    )
+
+    shapdata_ct = sl.tl.predict_ct(
+        adata,
+        clones,
+        clone_col="clone", # Column with clonal labels
+        ct_col="cell_type", # Column with cell type labels
+        limit_ct="progenitors", # Prediction will be performed based on these cells
+        ct_layer="frequencies", # Layer in `clones.layers` with proportions of cell types
+    )
 
 For more detailed walkthrough see **Exampels** section.

@@ -58,3 +58,5 @@ and after launch the tool from the command line:
 
    Basic_usage
    Multiple_injections
+   Cluster_based_SHAP
+   Cluster_free_SHAP

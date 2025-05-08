@@ -3,7 +3,7 @@ from __future__ import annotations
 from scanpy import read, AnnData
 from pathlib import Path
 
-Zenodo_record = "11401394"
+Zenodo_record = "15334396"
 
 def Weinreb_in_vitro(
     file_path: str | Path = "data/Weinreb_in_vitro.h5ad",
@@ -43,7 +43,7 @@ def Erickson_murine_development(
     region : str, optional
         Region of interest, one of `trunk` or `head`, by default "trunk".
     subset : str, optional
-        Subset of interest (`all`,  `neurons` or `mesenchyme`), by default "all".
+        Subset of interest (`all`,  `neurons`, `mesenchyme` or `other`), by default "all".
     file_path : str | Path | None, optional
         Path where .h5ad-container will be stored, by default None.
 
@@ -55,28 +55,30 @@ def Erickson_murine_development(
     datasets = {
         False: {
             "trunk": {
-                "all": "Erickson_trunk.h5ad",
-                "mesenchyme": "Erickson_trunk_mesenchyme.h5ad",
-                "neurons": "Erickson_trunk_neurons.h5ad",
-                "neural crest": "Erickson_trunk_NC.h5ad",
+                "all": "Erickson_Trunk_Control_All.h5ad",
+                "mesenchyme": "Erickson_Trunk_Control_Mesenchyme.h5ad",
+                "neurons": "Erickson_Trunk_Control_Neurons.h5ad",
+                "other": "Erickson_Trunk_Control_Other.h5ad",
             },
             "head": {
-                "all": "Erickson_head.h5ad",
-                "mesenchyme": "Erickson_head_mesenchyme.h5ad",
-                "neurons": "Erickson_head_neurons.h5ad",
+                "all": "Erickson_Head_Control_All.h5ad",
+                "mesenchyme": "Erickson_Head_Control_Mesenchyme.h5ad",
+                "neurons": "Erickson_Head_Control_Neurons.h5ad",
+                "other": "Erickson_Head_Control_Other.h5ad",
             },
         },
         True: {
             "trunk": {
-                "all": "Erickson_trunk_perturbed.h5ad",
-                "mesenchyme": "Erickson_trunk_mesenchyme_perturbed.h5ad",
-                "neurons": "Erickson_trunk_neurons_perturbed.h5ad",
-                "neural crest": "Erickson_trunk_NC_perturbed.h5ad",
+                "all": "Erickson_Trunk_Perturb_All.h5ad",
+                "mesenchyme": "Erickson_Trunk_Perturb_Mesenchyme.h5ad",
+                "neurons": "Erickson_Trunk_Perturb_Neurons.h5ad",
+                "other": "Erickson_Trunk_Perturb_Other.h5ad",
             },
             "head": {
-                "all": "Erickson_head_perturbed.h5ad",
-                "mesenchyme": "Erickson_head_mesenchyme_perturbed.h5ad",
-                "neurons": "Erickson_head_neurons_perturbed.h5ad",
+                "all": "Erickson_Head_Perturb_All.h5ad",
+                "mesenchyme": "Erickson_Head_Perturb_Mesenchyme.h5ad",
+                "neurons": "Erickson_Head_Perturb_Neurons.h5ad",
+                "other": "Erickson_Head_Perturb_Other.h5ad",
             },
         },
     }

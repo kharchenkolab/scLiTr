@@ -22,8 +22,9 @@ Preprocessing
 .. autosummary::
    :toctree: .
 
-   pp.prepare_clones2cells
+   pp.filter_clones
    pp.prepare_multiple_injections
+   pp.prepare_clones2cells
 
 Tools
 -----
@@ -36,6 +37,8 @@ Tools
    tl.transfer_clonal_annotation
    tl.summarize_expression
    tl.refill_ct
+   tl.predict_ct
+   tl.predict_c2v
 
 Plotting
 -----
@@ -48,4 +51,6 @@ Plotting
    pl.clone
    pl.epochs_loss
    pl.kde
+   pl.ct_predictors
+   pl.c2v_annotation
    
