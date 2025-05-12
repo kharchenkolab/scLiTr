@@ -2,6 +2,10 @@
 
 # scLiTr
 
+![Tests](https://github.com/kharchenkolab/scLiTr/actions/workflows/tests.yaml/badge.svg)
+![PyPI](https://img.shields.io/pypi/v/sclitr)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 scLiTr is a Python package for analysis of lineage tracing coupled with single-cell RNA-Seq.
 
 The main key of the package are clonal embeddings — vector representations of the whole clones

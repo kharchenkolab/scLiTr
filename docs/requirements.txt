@@ -13,3 +13,4 @@ torch
 mpltern
 catboost
 geosketch
+textalloc

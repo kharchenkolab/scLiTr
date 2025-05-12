@@ -28,11 +28,11 @@ def calculate_shap_correlation(
         coefficients for each gene.
     """
     cts = [i[5:] for i in shapdata_ct.layers.keys() if i[:5] == "shap_"]
-    expr_matrix = shapdata_ct.X.A
+    expr_matrix = shapdata_ct.X.toarray()
 
     for ct in cts:
         if f"shap_corr_{ct}" not in shapdata_ct.var_names:
-            shap_matrix = shapdata_ct.layers[f"shap_{ct}"].A
+            shap_matrix = shapdata_ct.layers[f"shap_{ct}"].toarray()
             correlations = []
             
             for i in range(expr_matrix.shape[1]):

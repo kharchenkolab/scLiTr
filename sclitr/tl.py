@@ -780,7 +780,7 @@ def refill_ct(
     """
     clones_new = sc.AnnData(adata.obs.groupby(
         [ct_col, obs_name]
-    ).size().unstack().T.loc[clones.obs_names])
+    ).size().unstack().T.loc[clones.obs_names].fillna(0))
     
     clones_new.uns = clones.uns.copy()
     clones_new.obs = clones.obs.copy()

@@ -177,8 +177,8 @@ def ct_predictors(
         
     # Step 1: calculate correlation
     if f"shap_corr_{celltype}" not in shapdata_ct.var.columns:
-        shap_matrix = shapdata_ct.layers[f"shap_{celltype}"].A
-        expr_matrix = shapdata_ct.X.A
+        shap_matrix = shapdata_ct.layers[f"shap_{celltype}"].toarray()
+        expr_matrix = shapdata_ct.X.toarray()
         correlations = []
         
         for i in range(expr_matrix.shape[1]):

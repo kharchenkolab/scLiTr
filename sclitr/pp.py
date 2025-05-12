@@ -9,7 +9,7 @@ import pandas as pd
 def filter_clones(
     adata: AnnData,
     na_value: str = "NA",
-    clonal_obs: str = "Clone",
+    clonal_obs: str = "clone",
     min_size: int | None = None,
     max_size: int | None = None,
     inplace: bool = True,
@@ -24,7 +24,7 @@ def filter_clones(
     na_value : str, optional
         The value used to indicate absence of clonal labeling for a cell. Default is "NA".
     clonal_obs : str, optional
-        The name of the column in `adata.obs` containing clonal labels. Default is "Clone".
+        The name of the column in `adata.obs` containing clonal labels. Default is "clone".
     min_size : int, optional
         The minimum number of cells required to keep a clone. Default is None (no lower bound).
     max_size : int, optional
@@ -90,8 +90,6 @@ def prepare_clones2cells(
     Exception
         If `embedding_type` is not one of "clone2vec" or "GEX", or if `embedding_type` is "GEX" but `clonal_obs` is not provided.
     """
-    keep_obs = keep_obs.copy()
-
     if embedding_type == "clone2vec":
         if keep_obs is None:
             df = pd.DataFrame(

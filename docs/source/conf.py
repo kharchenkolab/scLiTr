@@ -6,8 +6,8 @@ project = "scLiTr"
 copyright = "2024, Kharchenko lab, Adameyko lab"
 authors = "Isaev, Kharchenko"
 
-release = "0.1.4"
-version = "0.1.4"
+release = "1.0.1"
+version = "1.0.1"
 
 # -- General configuration ------------------------------------------------
 
