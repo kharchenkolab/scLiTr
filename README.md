@@ -2,7 +2,7 @@
 
 # scLiTr
 
-![Tests](https://github.com/kharchenkolab/scLiTr/actions/workflows/tests.yaml/badge.svg)
+![Tests](https://github.com/kharchenkolab/scLiTr/actions/workflows/tests.yml/badge.svg)
 ![PyPI](https://img.shields.io/pypi/v/sclitr)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
