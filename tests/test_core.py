@@ -1,9 +1,6 @@
 import numpy as np
 import scanpy as sc
 import pytest
-
-import sys
-sys.path.append("/home/sergey/tools/scLiTr/")
 import sclitr as sl
 
 @pytest.fixture(scope="session")

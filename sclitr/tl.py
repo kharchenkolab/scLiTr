@@ -737,7 +737,7 @@ def summarize_expression(
     for clone in clones.obs_names:
         if strategy == "average":
             try:
-                clones_expr[clone] = X[(adata.obs[obs_name] == clone) & mask].mean(axis=0).A[0]
+                clones_expr[clone] = X[(adata.obs[obs_name].values == clone) & mask].mean(axis=0).A[0]
             except ZeroDivisionError:
                 clones_expr[clone] = np.zeros(len(var_names))
         else:
