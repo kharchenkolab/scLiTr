@@ -509,7 +509,7 @@ def group_scatter(
     if kwargs_background is None:
         kwargs_background = [{} for i in range(len(groups))]
     if isinstance(kwargs_background, dict):
-        kwargs_background = [kwargs_backgroundcopy() for i in range(len(groups))]
+        kwargs_background = [kwargs_background.copy() for i in range(len(groups))]
     elif len(kwargs_background) != len(groups):
         raise ValueError("kwargs_background must be a dict or a list of dict with length equal to the number of groups")
     if kwargs_group is None:
