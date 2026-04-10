@@ -40,6 +40,47 @@ __all__ = [
 def __dir__():
     return sorted(__all__)
 
+def embedding(
+    adata: sc.AnnData,
+    obsm_name: str | None = None,
+    obsm_component: int | None = None,
+    basis: str = "X_umap",
+    **kwargs
+) -> matplotlib.axes.Axes | matplotlib.figure.Figure | None:
+    """
+    Wrapper around sc.pl.embedding that allows to plot embedding from obsm.
+
+    Parameters
+    ----------
+    adata: sc.AnnData
+        Annotated data matrix.
+    obsm_name: str | None
+        Key for embedding in `adata.obsm`.
+    obsm_component: int | None
+        Component to plot.
+    basis: str
+        Key for embedding coordinates in `adata.obsm`.
+    **kwargs
+        Additional arguments to pass to `sc.pl.embedding`.
+
+    Returns
+    -------
+    res: matplotlib.axes.Axes | matplotlib.figure.Figure | None
+        Axes object with the plot.
+    """
+    if obsm_name:
+        if obsm_component is None:
+            obsm_component = 0
+        adata.obs[f"{obsm_name}_{obsm_component}"] = list(adata.obsm[obsm_name][:, obsm_component])
+        kwargs["color"] = f"{obsm_name}_{obsm_component}"
+    if "ax" in kwargs:
+        kwargs["show"] = False
+    res = sc.pl.embedding(adata, basis=basis, **kwargs)
+    if obsm_name:
+        del adata.obs[f"{obsm_name}_{obsm_component}"]
+    return res
+
+
 def pca_loadings(
     adata: sc.AnnData,
     key: str = "gPCs",

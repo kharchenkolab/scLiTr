@@ -74,6 +74,18 @@ def test_group_kde_returns_figure(matrix_kind, adata_with_umap_dense, adata_with
     fig = c2v.pl.group_kde(ad, groupby="cell_type", groups=group, basis="X_umap", return_fig=True)
     assert isinstance(fig, plt.Figure)
 
+# ===== embedding =====
+
+def test_embedding_with_obsm(adata_with_umap_dense):
+    ad = adata_with_umap_dense.copy()
+    rng = np.random.RandomState(42)
+    ad.obsm["X_test_emb"] = rng.rand(ad.n_obs, 3)
+    ax = c2v.pl.embedding(ad, obsm_name="X_test_emb", obsm_component=1, basis="X_umap", show=False)
+    # temporary column should be removed after plotting
+    assert "X_test_emb_1" not in ad.obs.columns
+    plt.close("all")
+
+
 # ===== loss_history and clone_size =====
 
 def test_loss_history_plots_line(clones):

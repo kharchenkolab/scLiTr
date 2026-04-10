@@ -15,6 +15,7 @@ __all__ = [
     "get_connectivity_matrix",
     "gs",
     "regress_categories",
+    "impute",
 ]
 
 def __dir__():
