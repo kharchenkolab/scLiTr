@@ -237,3 +237,20 @@ def test_impute_categorical(adata_dense):
     imputed_vals = ad.obs["ct_with_na_imp"].astype(str).values
     assert np.sum(imputed_vals == "NA") == 0
     assert "impute_prob" in ad.obsm
+
+
+# ===== Tests for laplacian_eigenmaps =====
+
+def test_laplacian_eigenmaps():
+    n, k = 50, 5
+    # ring graph
+    rows = list(range(n)) + list(range(1, n)) + [0]
+    cols = list(range(1, n)) + [0] + list(range(n))
+    data = [1.0] * len(rows)
+    W = sp.csr_matrix((data, (rows, cols)), shape=(n, n))
+    ad = sc.AnnData(X=np.zeros((n, 2)), obsp={"connectivities": W})
+    c2v.utils.laplacian_eigenmaps(ad, n_components=k)
+    assert "X_laplacian" in ad.obsm
+    assert ad.obsm["X_laplacian"].shape == (n, k)
+    assert "laplacian_eigenmaps" in ad.uns
+    assert len(ad.uns["laplacian_eigenmaps"]["eigenvalues"]) == k

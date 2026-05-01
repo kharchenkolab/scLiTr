@@ -16,6 +16,7 @@ __all__ = [
     "gs",
     "regress_categories",
     "impute",
+    "laplacian_eigenmaps",
 ]
 
 def __dir__():
@@ -508,6 +509,10 @@ def _nan_mask(X: np.ndarray | sp.sparse.csr_matrix) -> np.ndarray:
             mask = np.isnan(arr).any(axis=1)
         return mask
 
+
+
+
+
 def gs(
     adata: sc.AnnData,
     use_rep: str = "X_pca",
@@ -615,5 +620,106 @@ def gs(
         "added",
         f"     .obs['{obs_key}'] geometric sketching labels",
         "     .uns['gs'] parameters",
+    ]
+    logg.info("    finished ({time_passed})", deep="\n".join(lines), time=start)
+
+def laplacian_eigenmaps(
+    adata: sc.AnnData,
+    obsp_key: str = "connectivities",
+    n_components: int = 20,
+    key_added: str = "X_laplacian",
+    norm_laplacian: bool = True,
+    uns_key: str = "laplacian_eigenmaps",
+) -> None:
+    """
+    Compute Laplacian eigenmaps from a sparse graph stored in ``adata.obsp``.
+
+    The function builds the (normalised) graph Laplacian from the adjacency
+    matrix in ``adata.obsp[obsp_key]``, computes the smallest non-trivial
+    eigenvectors, and stores them in ``adata.obsm[key_added]``.
+
+    Parameters
+    ----------
+    adata : sc.AnnData
+        Annotated data matrix.  Must contain a sparse adjacency matrix in
+        ``adata.obsp[obsp_key]``.
+    obsp_key : str, optional
+        Key in ``adata.obsp`` for the adjacency / connectivity matrix.
+        Default is ``"connectivities"``.
+    n_components : int, optional
+        Number of eigenvectors to compute (excluding the trivial constant
+        eigenvector).  Default is 20.
+    key_added : str, optional
+        Key in ``adata.obsm`` where the embedding is stored.
+        Default is ``"X_laplacian"``.
+    norm_laplacian : bool, optional
+        If ``True``, use the symmetric normalised Laplacian
+        :math:`I - D^{-1/2} W D^{-1/2}`.  Otherwise use the combinatorial
+        Laplacian :math:`D - W`.  Default is ``True``.
+    uns_key : str, optional
+        Name of the new column in ``adata.uns`` to store the Laplacian eigenmaps parameters,
+        by default "laplacian_eigenmaps".
+
+    Returns
+    -------
+    None
+        The embedding is stored in place in ``adata.obsm[key_added]``.
+    """
+    from scipy.sparse.linalg import eigsh
+
+    line_before = f"\n    using .obsp['{obsp_key}'], n_components={n_components}"
+    start = logg.info("computing Laplacian eigenmaps", deep=line_before)
+
+    if obsp_key not in adata.obsp:
+        raise KeyError(f"'{obsp_key}' not found in adata.obsp")
+
+    W = adata.obsp[obsp_key]
+    if not sp.issparse(W):
+        W = sp.csr_matrix(W)
+    else:
+        W = W.tocsr()
+
+    if (W - W.T).nnz > 0:
+        W = (W + W.T) / 2.0
+
+    n = W.shape[0]
+    if n_components >= n:
+        raise ValueError(
+            f"n_components ({n_components}) must be less than the number of "
+            f"observations ({n})"
+        )
+
+    d = np.asarray(W.sum(axis=1)).ravel()
+
+    if norm_laplacian:
+        d_inv_sqrt = np.zeros_like(d)
+        mask = d > 0
+        d_inv_sqrt[mask] = 1.0 / np.sqrt(d[mask])
+        D_inv_sqrt = sp.diags(d_inv_sqrt)
+        L = sp.eye(n, format="csr") - D_inv_sqrt @ W @ D_inv_sqrt
+    else:
+        D = sp.diags(d)
+        L = D - W
+
+    eigenvalues, eigenvectors = eigsh(L, k=n_components + 1, which="SM")
+
+    order = np.argsort(eigenvalues)
+    eigenvalues = eigenvalues[order]
+    eigenvectors = eigenvectors[:, order]
+
+    embedding = eigenvectors[:, 1:]
+
+    adata.obsm[key_added] = embedding
+    adata.uns[uns_key] = {
+        "eigenvalues": eigenvalues[1:],
+        "components": n_components,
+        "norm_laplacian": norm_laplacian,
+        "key_added": key_added,
+        "obsp_key": obsp_key,
+    }
+    lines = [
+        "added",
+        f"     .obsm['{key_added}'] Laplacian eigenmaps ({n_components} components)",
+        f"     .uns['{uns_key}'] parameters",
     ]
     logg.info("    finished ({time_passed})", deep="\n".join(lines), time=start)
