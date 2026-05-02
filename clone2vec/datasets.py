@@ -1,27 +1,89 @@
 from __future__ import annotations
 
 from scanpy import read, AnnData
+from typing import Literal
 from pathlib import Path
 
-zenodo_record_lt = "15334396"
+import scanpy as sc
 
-def Weinreb_in_vitro(
-    file_path: str | Path = "data/Weinreb_in_vitro.h5ad",
+zenodo_record_lt = "15334396"
+zenodo_record_c2v = "19973466"
+
+logg = sc.logging
+
+__all__ = [
+    "Liu_NSCLC_CD8",
+    "Weinreb_in_vitro",
+    "Erickson_murine_development",
+]
+
+def __dir__():
+    return sorted(__all__)
+
+def Liu_NSCLC_CD8(
+    embedding_type: Literal["gex", "c2v"] = "gex",
+    file_path: str | Path | None = None,
 ) -> AnnData:
     """
-    Dataset from [PMID: 31974159] with in vitro hematopoiesis.
+    Dataset from Liu et al. [PMID: 35121991] with CD8 T cells from NSCLC.
 
     Parameters
     ----------
-    file_path : str | Path, optional
-        Path where .h5ad-container will be stored, by default "data/Weinreb_in_vitro.h5ad".
+    embedding_type : Literal["gex", "c2v"], optional
+        Type of embedding to use, by default "gex".
+    file_path : str | Path | None, optional
+        Path where .h5ad-container will be stored, by default None.
 
     Returns
     -------
     AnnData
         Annotated data matrix with the dataset.
     """
-    url = f"https://zenodo.org/records/{zenodo_record_lt}/files/Weinreb_in_vitro.h5ad"
+    if embedding_type == "c2v":
+        logg.info("using clonal embedding (compositions in adata.X)")
+    elif embedding_type == "gex":
+        logg.info("using gene expression embedding")
+    else:
+        raise ValueError("embedding_type must be one of 'gex' or 'c2v'")
+
+    if file_path is None:
+        file_path = f"data/Liu_CD8_{embedding_type}.h5ad"
+        
+    url = f"https://zenodo.org/records/{zenodo_record_c2v}/files/Liu_CD8_{embedding_type}.h5ad"
+    
+    adata = read(file_path, backup_url=url, sparse=True, cache=True)
+    return adata
+
+def Weinreb_in_vitro(
+    embedding_type: Literal["gex", "c2v"] = "gex",
+    file_path: str | Path | None = None,
+) -> AnnData:
+    """
+    Dataset from Weinreb et al. [PMID: 31974159] with in vitro hematopoiesis.
+
+    Parameters
+    ----------
+    embedding_type : Literal["gex", "c2v"], optional
+        Type of embedding to use, by default "gex".
+    file_path : str | Path | None, optional
+        Path where .h5ad-container will be stored, by default None.
+
+    Returns
+    -------
+    AnnData
+        Annotated data matrix with the dataset.
+    """
+    if embedding_type == "c2v":
+        logg.info("using clonal embedding (compositions in adata.X)")
+    elif embedding_type == "gex":
+        logg.info("using gene expression embedding")
+    else:
+        raise ValueError("embedding_type must be one of 'gex' or 'c2v'")
+    
+    if file_path is None:
+        file_path = f"data/Weinreb_in_vitro_{embedding_type}.h5ad"
+    
+    url = f"https://zenodo.org/records/{zenodo_record_c2v}/files/Weinreb_in_vitro_{embedding_type}.h5ad"
     
     adata = read(file_path, backup_url=url, sparse=True, cache=True)
     return adata

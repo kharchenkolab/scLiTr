@@ -12,6 +12,7 @@ Datasets
 
    datasets.Weinreb_in_vitro
    datasets.Erickson_murine_development
+   datasets.Liu_NSCLC_CD8
 
 Preprocessing
 -------------
@@ -78,6 +79,8 @@ Utils
    utils.regress_categories
    utils.impute
    utils.gs
+   utils.laplacian_eigenmaps
+
 
 Plotting
 --------

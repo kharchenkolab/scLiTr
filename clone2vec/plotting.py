@@ -35,6 +35,7 @@ __all__ = [
     "scaled_dotplot",
     "scatter2vars",
     "pca_loadings",
+    "embedding",
 ]
 
 def __dir__():
@@ -43,7 +44,7 @@ def __dir__():
 def embedding(
     adata: sc.AnnData,
     obsm_name: str | None = None,
-    obsm_component: int | None = None,
+    obsm_component: int | str | list[int] | list[str] | None = None,
     basis: str = "X_umap",
     **kwargs
 ) -> matplotlib.axes.Axes | matplotlib.figure.Figure | None:
@@ -56,8 +57,15 @@ def embedding(
         Annotated data matrix.
     obsm_name: str | None
         Key for embedding in `adata.obsm`.
-    obsm_component: int | None
-        Component to plot.
+    obsm_component: int | str | list[int] | list[str] | None
+        Component(s) to plot. Can be:
+
+        - ``int``: column index (works for both arrays and DataFrames).
+        - ``str``: column name (only when ``adata.obsm[obsm_name]`` is a
+          :class:`~pandas.DataFrame`).
+        - ``list[int]`` or ``list[str]``: multiple components; each is
+          plotted as a separate colour channel via *sc.pl.embedding*.
+        - ``None`` (default): uses component ``0``.
     basis: str
         Key for embedding coordinates in `adata.obsm`.
     **kwargs
@@ -68,16 +76,40 @@ def embedding(
     res: matplotlib.axes.Axes | matplotlib.figure.Figure | None
         Axes object with the plot.
     """
+    tmp_keys: list[str] = []  # obs keys to clean up afterwards
     if obsm_name:
         if obsm_component is None:
             obsm_component = 0
-        adata.obs[f"{obsm_name}_{obsm_component}"] = list(adata.obsm[obsm_name][:, obsm_component])
-        kwargs["color"] = f"{obsm_name}_{obsm_component}"
+
+        obsm_data = adata.obsm[obsm_name]
+        is_df = isinstance(obsm_data, pd.DataFrame)
+
+        # Normalise to a list so that the loop below works for both
+        # scalar and list inputs.
+        components = (
+            obsm_component
+            if isinstance(obsm_component, list)
+            else [obsm_component]
+        )
+
+        for comp in components:
+            obs_key = f"{obsm_name}_{comp}"
+            if is_df:
+                if isinstance(comp, str):
+                    adata.obs[obs_key] = list(obsm_data[comp])
+                else:
+                    adata.obs[obs_key] = list(obsm_data.iloc[:, comp])
+            else:
+                adata.obs[obs_key] = list(obsm_data[:, comp])
+            tmp_keys.append(obs_key)
+
+        kwargs["color"] = tmp_keys if len(tmp_keys) > 1 else tmp_keys[0]
+
     if "ax" in kwargs:
         kwargs["show"] = False
     res = sc.pl.embedding(adata, basis=basis, **kwargs)
-    if obsm_name:
-        del adata.obs[f"{obsm_name}_{obsm_component}"]
+    for key in tmp_keys:
+        del adata.obs[key]
     return res
 
 

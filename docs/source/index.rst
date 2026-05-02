@@ -51,5 +51,9 @@ The latest development version can be installed from GitHub using:
 
    Clonal_embeddings
    Fast_clonal_embeddings
+   Archetypal_analysis
+   Graph_input
+   Batch_effect_propagation
+   Integration
    Spatial_classification_mRNA
    
