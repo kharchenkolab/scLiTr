@@ -2,12 +2,14 @@
 
 # -- Project information
 
+from importlib.metadata import version as _v
+
 project = "clone2vec"
 author = "Sergey Isaev"
 copyright = "2026, Kharchenko lab, Adameyko lab"
 
-release = "0.1.2"
-version = "0.1.2"
+release = _v("clone2vec")
+version = ".".join(release.split(".")[:2])
 
 # -- General configuration ------------------------------------------------
 

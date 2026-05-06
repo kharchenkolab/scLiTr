@@ -1,6 +1,60 @@
 [build-system]
-requires = [
-    "setuptools>=54",
-    "wheel"
-]
+requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "clone2vec"
+description = "Package for an analysis of lineage-tracing scRNA-Seq data"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "Sergey Isaev", email = "s@isaev.cc"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+dynamic = ["version"]
+dependencies = [
+    "pynndescent",
+    "scanpy",
+    "scikit-learn",
+    "torch",
+    "joblib",
+    "statsmodels",
+    "tqdm"
+]
+
+[project.optional-dependencies]
+test = [
+    "catboost",
+    "geosketch",
+    "fastglmpca",
+    "mpltern",
+    "textalloc"
+]
+full = [
+    "catboost",
+    "geosketch",
+    "fastglmpca",
+    "mpltern",
+    "textalloc",
+    "anywidget",
+    "ipywidgets",
+    "jupyter-scatter",
+    "rpy2",
+    "mudata"
+]
+
+[project.urls]
+Homepage = "https://github.com/kharchenkolab/clone2vec"
+
+[tool.setuptools.dynamic]
+version = {attr = "clone2vec.__version__"}
+
+[tool.setuptools.packages.find]
+# equivalent to "packages = find:"
+
+[tool.setuptools]
+include-package-data = true
