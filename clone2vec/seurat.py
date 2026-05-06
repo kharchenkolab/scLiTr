@@ -4,6 +4,7 @@ import scanpy as sc
 import numpy as np
 import scipy.sparse as sp
 import pandas as pd
+import rpy2.robjects as ro
 
 import sys
 import os
@@ -57,7 +58,6 @@ def _get_RMatrix(
     sparse: bool | None = None,
     use_raw: bool = False,
 ) -> ro.rinterface.Sexp:
-    import rpy2.robjects as ro
     from rpy2.robjects.packages import importr
 
     Matrix = importr("Matrix")

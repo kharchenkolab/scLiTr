@@ -3,8 +3,8 @@
 # -- Project information
 
 project = "clone2vec"
+author = "Sergey Isaev"
 copyright = "2026, Kharchenko lab, Adameyko lab"
-authors = "Isaev"
 
 release = "0.1.2"
 version = "0.1.2"
