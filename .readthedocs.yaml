@@ -12,10 +12,5 @@ python:
 sphinx:
   configuration: docs/source/conf.py
 
-python:
-  install:
-    - method: pip
-      path: .
-
 formats:
   - pdf
