@@ -8,8 +8,7 @@ project = "clone2vec"
 author = "Sergey Isaev"
 copyright = "2026, Kharchenko lab, Adameyko lab"
 
-release = _v("clone2vec")
-version = ".".join(release.split(".")[:2])
+
 
 # -- General configuration ------------------------------------------------
 
@@ -19,6 +18,10 @@ import sys
 sys.path.insert(0, os.path.abspath("../../."))
 
 import clone2vec as c2v
+
+release = c2v.__version__
+version = ".".join(release.split(".")[:2])
+
 sys.modules["c2v"] = c2v
 sys.modules["c2v.tl"] = c2v.tools
 sys.modules["c2v.pl"] = c2v.plotting
