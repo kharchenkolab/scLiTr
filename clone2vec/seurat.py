@@ -4,7 +4,6 @@ import scanpy as sc
 import numpy as np
 import scipy.sparse as sp
 import pandas as pd
-import rpy2.robjects as ro
 
 import sys
 import os
@@ -59,6 +58,7 @@ def _get_RMatrix(
     use_raw: bool = False,
 ) -> ro.rinterface.Sexp:
     from rpy2.robjects.packages import importr
+    import rpy2.robjects as ro
 
     Matrix = importr("Matrix")
 
@@ -157,6 +157,7 @@ def read(
     from rpy2.robjects.conversion import localconverter
     import rpy2.rinterface_lib.callbacks as callbacks
     from rpy2.robjects import pandas2ri
+    import rpy2.robjects as ro
 
     class _RCallbacks():
         def __init__(self, callback):
